@@ -7,11 +7,16 @@
         </el-aside>
       </div>
       <div class="resize" ref="resize"></div>
-      <div class="mid" ref="mid">
+      <div :style="midWidth" class="mid" ref="mid" id="box">
         <el-container >
           <el-header><Headers></Headers></el-header>
-          <el-main><Main></Main></el-main>
-          <el-footer height="190px"><Footer></Footer></el-footer>
+          <div :style="topBoxHeight" id="topBoxId">
+            <el-main><Main></Main></el-main>
+          </div>
+          <div id="resizeId" class="r-resize"></div>
+          <!-- <div id="downBoxId"> -->
+            <el-footer  id="downBoxId" height="190px"><Footer></Footer></el-footer>
+          <!-- </div> -->
         </el-container>
       </div>
     </el-container>
@@ -31,19 +36,23 @@ export default {
   },
   data() {
     return {
-      json: null
+      json: null,
+      midWidth: '--mid-width: 200px',
+      topBoxHeight: '--top-box-height: 255px',
     };
   },
   mounted() {
-    this.dragControllerDiv();
+    this.dragControllerDivWidth();
+    this.dragControllerDivHeight();
   },
   methods: {
-    dragControllerDiv() {
+    dragControllerDivWidth() {
+      const __this = this;
       let resize = document.getElementsByClassName("resize");
       let left = document.getElementsByClassName("left");
       let mid = document.getElementsByClassName("mid");
       let box = document.getElementsByClassName("box");
-      
+
       for (let i = 0; i < resize.length; i++) {
         // 鼠标按下事件
         resize[i].onmousedown = function(e) {
@@ -59,10 +68,12 @@ export default {
             if (moveLen > maxT - 150) moveLen = maxT - 150; //右边区域最小宽度为150px
 
             resize[i].style.left = moveLen; // 设置左侧区域的宽度
-            
+
             for (let j = 0; j < left.length; j++) {
               left[j].style.width = moveLen + "px";
-              mid[j].style.width = box[i].clientWidth - moveLen - 10 + "px";
+              // mid[j].style = `--min-width: ${box[i].clientWidth - moveLen - 10}px);`
+              
+              __this.$set(__this, 'midWidth', `--mid-width: ${moveLen + 10}px`)
             }
           };
           // 鼠标松开事件
@@ -75,6 +86,35 @@ export default {
           return false;
         };
       }
+    },
+    dragControllerDivHeight() {
+      const __this = this;
+      let resize = document.getElementById("resizeId");
+      let topBox = document.getElementById("topBoxId");
+      let downBox = document.getElementById("downBoxId");
+      let box = document.getElementById("box");
+      resize.onmousedown = function(e) {
+        let startY = e.clientY;
+        resize.top = resize.offsetTop;
+        document.onmousemove = function(e) {
+          let endY = e.clientY;
+          let moveLen = resize.top + (endY - startY);
+          let maxT = box.clientHeight - resize.offsetHeight;
+          if (moveLen < 100) moveLen = 100;
+          if (moveLen > maxT - 100) moveLen = maxT - 100;
+          resize.style.top = moveLen;
+          // topBox.style.height = moveLen + "px";
+          __this.topBoxHeight = `--top-box-height: ${box.clientHeight - moveLen - 5}px`
+          downBox.style.height = box.clientHeight - moveLen - 5 + "px";
+        };
+        document.onmouseup = function() {
+          document.onmousemove = null;
+          document.onmouseup = null;
+          resize.releaseCapture && resize.releaseCapture();
+        };
+        resize.setCapture && resize.setCapture();
+        return false;
+      };
     }
   }
 };
@@ -94,14 +134,14 @@ export default {
 }
 .el-header,
 .el-footer {
-  background-color: #b3c0d1;
+  background-color: #e9eef3;
   color: #333;
   text-align: center;
   line-height: 60px;
 }
 .el-footer {
   height: 190px;
-  margin-top: 10px;
+  // margin-top: 10px;
   overflow-y: hidden;
   text-align: inherit;
   line-height: inherit;
@@ -163,6 +203,28 @@ body > .el-container {
   float: left;
   width: calc(100% - 200px);
   height: 100%;
-  background: #f3f3f3;
+  background: #e9eef3;
+  width: calc(100% - var(--mid-width));
+}
+
+.r-resize {
+  width: 100%;
+  height: 5px;
+  background: #f0f0f0;
+  cursor: n-resize;
+}
+#topBoxId {
+  overflow-y: scroll;
+  width: 100%;
+  height: calc(100% - 5px - 190px - 60px);
+  -ms-overflow-style: none;
+  /*火狐下隐藏滚动条*/
+  overflow: -moz-scrollbars-none;
+  height: calc(100% - var(--top-box-height));
+}
+
+
+#topBoxId::-webkit-scrollbar {
+  display: none;
 }
 </style>

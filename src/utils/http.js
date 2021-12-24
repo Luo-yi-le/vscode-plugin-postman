@@ -28,11 +28,50 @@ function POST(method = 'post', url, data = {}, option = options) {
     let config = {
         method: method,
         url: url,
-        params: data,
+        data: data,
     };
     config = Object.assign({}, config, options, option);
     return Result(config);
 }
+
+function PUT(method = 'post', url, data = {}, option = options) {
+    let config = {
+        method: method,
+        url: url,
+        data: data,
+    };
+    config = Object.assign({}, config, options, option);
+    return Result(config);
+}
+function PATCH(method = 'post', url, data = {}, option = options) {
+    let config = {
+        method: method,
+        url: url,
+        data: data,
+    };
+    config = Object.assign({}, config, options, option);
+    return Result(config);
+}
+function DELETE(method = 'post', url, data = {}, option = options) {
+    let config = {
+        method: method,
+        url: url,
+        data: data,
+    };
+    config = Object.assign({}, config, options, option);
+    return Result(config);
+}
+
+function COPY(method = 'post', url, data = {}, option = options) {
+    let config = {
+        method: method,
+        url: url,
+        data: data,
+    };
+    config = Object.assign({}, config, options, option);
+    return Result(config);
+}
+
 
 const Result = async function (config) {
     await AXIOS();
@@ -66,7 +105,7 @@ async function AXIOS() {
         response.duration = response.config.endTime - response.config.startTime;
         return response;
     }, (error => {
-        console.log(error.response)
+        console.log(error.response.status)
         error.response.config.startTime = new Date();
         error.response.config.endTime = new Date();
         error.response.duration = error.response.config.endTime - error.response.config.startTime;

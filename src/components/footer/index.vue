@@ -1,6 +1,5 @@
 <template>
     <div class="footer">
-      <!-- {{jsonData}} -->
       <jv
       :value="jsonData"
       :expand-depth='5'
@@ -9,7 +8,6 @@
       boxed
       sort>
       </jv>
-        <!-- <jv1 :json="jsonData"></jv1> -->
     </div>
 </template>
 <script>

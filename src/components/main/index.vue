@@ -36,20 +36,23 @@ export default {
             getMethod: '',
             getUrl: '',
             data: {},
-            headers: {}
+            headers: {},
+            params: [],
+            lock: false
         }
     },
     mounted() {
-        
+        this.takeMetadataRow()
     },
     methods: {
         handleSend() {
             let data ={
                 method: this.getMethod,
                 url: this.getUrl,
-                data: this.data,
+                data: this.params,
                 headers: this.headers,
-                status: 200
+                status: 200,
+                lock: true // 加锁
             }
             $ajax(this.getMethod, this.getUrl, this.data, {headers: this.headers})
             .then(res=>{
@@ -59,16 +62,14 @@ export default {
                 data.status = error.status
             })
             
-            this.save(data);
-
-            
+            !this.lock && this.save(data);
         },
-        handleGetParams(params) {
-            this.data = params
+        handleGetParams(params, data) {
+            this.data = params;
+            this.params = data
         },
         handleChangeMethod(method) {
             this.SET_METHOD(method)
-            
         },
         handleChange(url) {
             this.SET_METHOD_URL(url)
@@ -95,8 +96,27 @@ export default {
             }
             
             this.$bus.emit('send-metadata', true)
+        },
+
+        takeMetadataRow() {
+            this.$bus.on('send-metadata-row', (row)=> {
+                this.getMethod = row.method;
+                this.getUrl = row.url;
+                this.lock = row.lock
+                this.tabsSetting.forEach(item=>{
+                    if(item.name == 'Params' && row.data && row.data[0] && row.data[0].index) {
+                        item.tableData = row.data
+                    } else {
+                        item.tableData = [ { index: 1, KEY: '', VALUE: '' }, ]
+                    }
+                })
+            })
         }
-    }
+        
+    },
+    beforDestory() {
+        this.$bus.off("send-metadata-row", this.takeMetadataRow);
+    },
 }
 </script>
 <style lang="scss" scoped>

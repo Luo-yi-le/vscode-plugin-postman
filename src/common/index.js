@@ -5,15 +5,15 @@ const MethodArray = [
     { method: 'patch' },
     { method: 'delete' },
     { method: 'copy' },
-    { method: 'head' },
-    { method: 'options' },
-    { method: 'link' },
-    { method: 'unlink' },
-    { method: 'purge' },
-    { method: 'lock' },
-    { method: 'unlock' },
-    { method: 'propfind' },
-    { method: 'view' },
+    // { method: 'head' },
+    // { method: 'options' },
+    // { method: 'link' },
+    // { method: 'unlink' },
+    // { method: 'purge' },
+    // { method: 'lock' },
+    // { method: 'unlock' },
+    // { method: 'propfind' },
+    // { method: 'view' },
 ]
 
 const tabsSetting = [
@@ -24,9 +24,7 @@ const tabsSetting = [
             { key: 'VALUE', label: "VALUE" },
             { key: 'DESCRIPTION', label: "DESCRIPTION" },
         ],
-        tableData: [
-            { index: 1, KEY: '', VALUE: '' },
-        ]
+        tableData: [ { index: 1, KEY: '', VALUE: '' }, ]
     },
     { label: 'Authorization', name: 'Authorization' },
     {

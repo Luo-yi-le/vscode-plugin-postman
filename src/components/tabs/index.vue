@@ -11,7 +11,10 @@
 </template>
 <script>
 import Table from './../table';
+import { HandleStoreAction } from '@/mixins/handleStoreAction';
+
 export default {
+    mixins: [ HandleStoreAction ],
     components: {
         Table
     },
@@ -30,15 +33,16 @@ export default {
     mounted() {},
     methods: {
         handleClick({ name, label }, event) {
+            this.SET_TABS_ACTIVE(name)
         },
-        getData(res) {
+        getData(res, data) {
             let obj = {};
             for(let key in res){
                 if(key) {
                     obj[key] = res[key]
                 }
             }
-            this.$emit('params', obj)
+            this.$emit('params', obj, data)
         }
     }
 }

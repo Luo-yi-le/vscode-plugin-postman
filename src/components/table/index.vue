@@ -82,7 +82,7 @@ export default {
       this.data.forEach(item => {
         obj[item.KEY] = item.VALUE;
       });
-      this.getData(obj)
+      this.getData(obj, this.data)
     },
     handleInput({ index }) {
       let arr = _.cloneDeep(this.keyValue); 
