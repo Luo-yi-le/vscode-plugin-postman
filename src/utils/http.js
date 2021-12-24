@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Qs from 'qs';
-
+import axios from 'axios';
 let options = {
 
     // `headers` 是即将被发送的自定义请求头
@@ -35,10 +35,9 @@ function POST(method = 'post', url, data = {}, option = options) {
 }
 
 const Result = async function (config) {
-    AXIOS()
+    await AXIOS();
     return new Promise(function (resolve, reject) {
-        Vue.axios(config).then(res => {
-            console.log(res)
+        axios(config).then(res => {
             resolve(res)
         }).catch((error) => {
             reject(error);
@@ -54,18 +53,32 @@ export function $ajax(method = 'get', url, data, option) {
     })
 }
 
-function AXIOS() {
-    Vue.axios.interceptors.request.use(config => {
-        config.metadata = { startTime: new Date() }
+async function AXIOS() {
+    axios.interceptors.request.use(config => {
+        config.startTime = new Date();
         return config;
-    }, (error => { return Promise.reject(error) }))
-    Vue.axios.interceptors.response.use(response=>{
-        response.config.metadata.endTime = new Date();
-        response.duration = response.config.metadata.endTime - response.config.metadata.startTime;
+    }, (error => {
+        error.config.startTime = new Date();
+        return Promise.resolve(error)
+    }))
+    axios.interceptors.response.use(response => {
+        response.config.endTime = new Date();
+        response.duration = response.config.endTime - response.config.startTime;
         return response;
-    }, error=>{
-        error.config.metadata.endTime = new Date();
-        error.duration = error.config.metadata.endTime - error.config.metadata.startTime;
-        return Promise.reject(error);
-    });
+    }, (error => {
+        console.log(error.response)
+        error.response.config.startTime = new Date();
+        error.response.config.endTime = new Date();
+        error.response.duration = error.response.config.endTime - error.response.config.startTime;
+
+        if (error.response && error.response.status == 404) {
+            return Promise.resolve(error.response)
+        }
+        if (error.response && error.response.status == 401) {
+            return Promise.resolve(error.response)
+        }
+        return Promise.resolve(error);
+    }));
 }
+
+

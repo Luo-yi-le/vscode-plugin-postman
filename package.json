@@ -1,6 +1,6 @@
 {
   "name": "vscode-plugin-postman",
-  "version": "0.1.1",
+  "version": "0.1.21",
   "private": true,
   "description": "VSCode插件-postman",
   "keywords": [
@@ -48,7 +48,7 @@
     "viewsContainers": {
       "activitybar": [{
         "id": "home-icon",
-        "title": "postman",
+        "title": "POSTMAN",
         "icon": "./plugin/image/icon.png"
       }]
     },

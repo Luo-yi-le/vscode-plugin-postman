@@ -71,7 +71,7 @@ const util = {
      * 全局日志开关，发布时可以注释掉日志输出
      */
     log: function(/** @type {any} */ ...args) {
-        console.log(...args);
+        // console.log(...args);
     },
 
     warn:function(/** @type {string} */ info) {

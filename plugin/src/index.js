@@ -57,7 +57,7 @@ module.exports = function(context) {
     context.subscriptions.push(vscode.commands.registerCommand('extension.postman.showindex', function (uri) {
         const panel = vscode.window.createWebviewPanel(
             'open-page', // viewType
-            "打开首页", // 视图标题
+            "POSTMAN", // 视图标题
             vscode.ViewColumn.One, // 显示在编辑器的哪个部位
             {
                 enableScripts: true, // 启用JS，默认禁用

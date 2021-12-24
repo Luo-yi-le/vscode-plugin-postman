@@ -3,9 +3,10 @@
         "browser": false,
         "commonjs": true,
         "es6": true,
-        "esnext": true
+        "node": true
     },
     "parserOptions": {
+        "ecmaVersion": 9,
         "ecmaFeatures": {
             "jsx": true
         },

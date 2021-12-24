@@ -1,7 +1,8 @@
 <template>
   <div ref="viewer" :class="jvClass">
     <div v-if="copyable" :class="`jv-tooltip ${copyText.align || 'right'}`">
-      <span v-if="httpConfig.duration" class="jv-button">{{httpConfig.duration}}ms</span>
+      <span v-if="httpConfig.status" class="jv-button green">{{httpConfig.status}} {{httpConfig.statusText}}</span>
+      <span v-if="httpConfig.duration" class="jv-button green">{{httpConfig.duration}}ms</span>
       <span ref="clip" class="jv-button" :class="{copied}">
         <slot name="copy" :copied="copied">
           {{ copied ? copyText.copiedText : copyText.copyText }}
@@ -83,7 +84,7 @@ export default {
       default: true,
     },
     httpConfig: {
-      type: [Array, Object, XMLHttpRequest],
+      type: [Array, Object, XMLHttpRequest, Error],
       default: ()=>{
         return {
           duration: 0
@@ -260,6 +261,10 @@ export default {
           }
         }
       }
+    }
+
+    .green {
+      color: green;
     }
   }
 
