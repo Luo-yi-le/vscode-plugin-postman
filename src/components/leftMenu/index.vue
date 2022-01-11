@@ -4,15 +4,15 @@
             <template v-for="(meta, index) in metadata">
                 <el-collapse-item :key="index">
                     <template slot="title">
-                        <span>{{meta.time | filterTime}}</span>
-                        <span class="icon" @click="handleDelete(index)"><i class="el-icon-delete"></i></span>
+                        <span class="time">{{meta.time | filterTime}}</span>
+                        <span class="icon" @click="handleDelete(meta.time)"><i class="el-icon-delete"></i></span>
                     </template>
                     <template v-for="(data, $index) in meta.data">
                       <div class="content" :key="$index">
                         <div :title="data.url" class="row">
                           <span class="item" @click="handleClick(data)">{{data.method | toUpperCase}} {{data.url}}</span>
                         </div>
-                        <div class="icom" @click="handleDelete(index, data, $index)"><i class="el-icon-delete"></i></div>
+                        <div class="icom" @click="handleDelete(meta.time, data.id)"><i class="el-icon-delete"></i></div>
                       </div>
                     </template>
                 </el-collapse-item>
@@ -22,40 +22,41 @@
     </div>
 </template>
 <script>
-import { LStorage } from "@/utils/Store";
+import { $ajax } from '@/utils/http.js';
 export default {
   data() {
     return {
       metadata: []
     };
   },
-  mounted() {
-    this.init();
+  async mounted() {
+    await this.init();
     this.sendMetaData();
   },
   methods: {
-    init() {
-      this.metadata = JSON.parse(LStorage.getItem("metadata")) || [];
+    async init() {
+      let result = await $ajax('post', 'http://127.0.0.1:32333/list', {})
+      if(result.data.code == 200) {
+        this.metadata = result.data.data;
+      }
     },
     sendMetaData() {
-      this.$bus.on("send-metadata", flag => {
-        console.log(flag)
+      this.$bus.on("send-metadata", async(flag) => {
         if (flag) {
-          this.init();
+          await this.init();
         }
       });
     },
     handleClick(row) {
       this.$bus.emit("send-metadata-row", row)
     },
-    handleDelete(index, data, data_index) {
-      if(data && data_index) {
-        this.$delete(this.metadata[index].data, data_index);
+    async handleDelete(time, id) {
+      if(time && id) {
+        await $ajax('post', 'http://127.0.0.1:32333/delete', {time, id})
       }else {
-        this.$delete(this.metadata, index);
+        await $ajax('post', 'http://127.0.0.1:32333/delete', {time})
       }
-      
-      LStorage.setItem("metadata", this.metadata)
+      await this.init()
     }
   },
   beforDestory() {
@@ -67,7 +68,7 @@ export default {
       if(value == Date.parse(new Date().toLocaleDateString())){
         return '今天 ' + new Date().toLocaleDateString();
       };
-      return new Date().toLocaleDateString();
+      return new Date(value).toLocaleDateString();
     },
     toUpperCase(value) {
       if (!value) return '';
@@ -84,7 +85,11 @@ export default {
   .el-collapse-item__header{
     position: relative;
     justify-content: right;
+    .time {
+      padding-left: 10px;
+    }
     .icon{
+      right: 0;
       position: absolute;
       margin-right: 30px;
     }

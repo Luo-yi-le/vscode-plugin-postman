@@ -7,8 +7,6 @@ import Bus from './utils/Bus';
 import axios from 'axios';
 import VueAxios from './utils/vue-axios';
 
-
-
 Vue.config.productionTip = false;
 
 Vue.use(ElementUI);

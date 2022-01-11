@@ -58,5 +58,18 @@ module.exports = {
     // 第三方插件配置
     pluginOptions: {
         // ...
-    }
+    },
+    transpileDependencies: [
+        "body-parser",
+        "child_process",
+        "cookie-parser",
+        "express",
+        "http-errors",
+        "lowdb",
+        "morgan",
+        "pug",
+        "fs",
+        "path",
+        "reflect-metadata"
+    ]
 }

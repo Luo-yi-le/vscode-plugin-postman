@@ -52,8 +52,7 @@ const messageHandler = {
     }
 };
 
-module.exports = function(context) {
-
+module.exports = function(context, server) {
     context.subscriptions.push(vscode.commands.registerCommand('extension.postman.showindex', function (uri) {
         const panel = vscode.window.createWebviewPanel(
             'open-page', // viewType
@@ -61,8 +60,10 @@ module.exports = function(context) {
             vscode.ViewColumn.One, // 显示在编辑器的哪个部位
             {
                 enableScripts: true, // 启用JS，默认禁用
-            }
+                retainContextWhenHidden: true,
+            },
         );
+        // vscode.window.$$onProcess = server
         let global = { panel};
         panel.webview.html = getWebViewContent(context, '/dist/index.html');
         panel.webview.onDidReceiveMessage(message => {

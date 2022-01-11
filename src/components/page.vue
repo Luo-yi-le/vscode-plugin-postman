@@ -44,6 +44,7 @@ export default {
   mounted() {
     this.dragControllerDivWidth();
     this.dragControllerDivHeight();
+    console.log(window)
   },
   methods: {
     dragControllerDivWidth() {
