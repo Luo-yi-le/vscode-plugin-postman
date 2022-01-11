@@ -34,7 +34,7 @@ export default {
     return {
       MethodArray,
       tabsSetting,
-      getMethod: "",
+      getMethod: "get",
       getUrl: "",
       data: {},
       headers: {},
