@@ -1,6 +1,6 @@
 {
   "name": "vscode-plugin-postman",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "private": true,
   "description": "VSCode插件-postman",
   "keywords": [
@@ -10,6 +10,7 @@
     "vscode",
     "plugin"
   ],
+  "icon": "plugin/image/icon.png",
   "repository": {
     "type" : "git",
     "url" : "https://github.com/Luo-yi-le/vscode-plugin-postman.git"
